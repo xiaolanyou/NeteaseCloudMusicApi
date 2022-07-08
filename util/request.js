@@ -50,6 +50,7 @@ const createRequest = (method, url, data = {}, options) => {
     if (url.includes('music.163.com'))
       headers['Referer'] = 'https://music.163.com'
     let ip = '116.25.146.177' || options.ip || ''
+    // let ip = options.realIP || options.ip || ''
     // console.log(ip)
     if (ip) {
       headers['X-Real-IP'] = ip
