@@ -49,7 +49,7 @@ const createRequest = (method, url, data = {}, options) => {
       headers['Content-Type'] = 'application/x-www-form-urlencoded'
     if (url.includes('music.163.com'))
       headers['Referer'] = 'https://music.163.com'
-    let ip = options.realIP || options.ip || ''
+    let ip = '116.25.146.177' || options.ip || ''
     // console.log(ip)
     if (ip) {
       headers['X-Real-IP'] = ip
