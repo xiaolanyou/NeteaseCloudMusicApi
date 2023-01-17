@@ -1625,6 +1625,21 @@ tags: 歌单标签
 返回数据如下图 :
 ![获取歌词](https://raw.githubusercontent.com/Binaryify/NeteaseCloudMusicApi/master/static/%E6%AD%8C%E8%AF%8D.png)
 
+### 获取逐字歌词
+
+说明 : 此接口的 `yrc` 字段即为逐字歌词 (可能有歌曲不包含逐字歌词)
+
+
+**必选参数 :** `id`: 音乐 id
+
+**接口地址 :** `/lyric/new`
+
+**调用例子 :** `/lyric/new?id=1824020871`
+
+
+相关讨论可见: [Issue](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/1667)
+
+
 ### 新歌速递
 
 说明 : 调用此接口 , 可获取新歌速递
@@ -3620,7 +3635,7 @@ type='1009' 获取其 id, 如`/search?keywords= 代码时间 &type=1009`
 
 ### vip 成长值
 
-说明 : 登陆后调用此接口 , 可获取当前会员成长值
+说明 : 登录后调用此接口 , 可获取当前会员成长值
 
 **接口地址 :** `/vip/growthpoint`
 
@@ -3640,7 +3655,7 @@ type='1009' 获取其 id, 如`/search?keywords= 代码时间 &type=1009`
 
 ### vip 任务
 
-说明 : 登陆后调用此接口 , 可获取会员任务
+说明 : 登录后调用此接口 , 可获取会员任务
 
 **接口地址 :** `/vip/tasks`
 
@@ -3648,7 +3663,7 @@ type='1009' 获取其 id, 如`/search?keywords= 代码时间 &type=1009`
 
 ### 领取 vip 成长值
 
-说明 : 登陆后调用此接口 , 可获取已完成的会员任务的成长值奖励
+说明 : 登录后调用此接口 , 可获取已完成的会员任务的成长值奖励
 
 **必选参数 :** `ids` : 通过`/vip/tasks`获取到的`unGetIds`
 
@@ -3934,13 +3949,13 @@ type='1009' 获取其 id, 如`/search?keywords= 代码时间 &type=1009`
 
 ### 乐谱内容
 
-说明: 调用此接口获取乐谱的内容
+说明: 登录后调用此接口获取乐谱的内容
 
 **接口地址:** `/sheet/preview`
 
 **必选参数:** `id`: **乐谱** ID
 
-**调用例子:** `/sheet/preview?id=245206`
+**调用例子:** `/sheet/preview?id=143190`
 
 ### 曲风列表
 
@@ -3952,7 +3967,7 @@ type='1009' 获取其 id, 如`/search?keywords= 代码时间 &type=1009`
 
 ### 曲风偏好
 
-说明: 登陆后调用此接口获取我的曲风偏好
+说明: 登录后调用此接口获取我的曲风偏好
 
 **接口地址:** `/style/preference`
 
