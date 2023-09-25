@@ -24,7 +24,7 @@
 
 ## 环境要求
 
-需要 NodeJS 12+ 环境
+需要 NodeJS 14+ 环境
 
 ## 安装
 
@@ -128,9 +128,8 @@ banner({ type:0 }).then(res=>{
 
 ## 使用文档
 
-[文档地址](https://binaryify.github.io/NeteaseCloudMusicApi) 
+[文档地址](http://docs.neteasecloudmusicapi.binaryify.com/#/) 
 
-[文档地址2](https://neteasecloudmusicapi.vercel.app)
 
 ![文档](https://raw.githubusercontent.com/Binaryify/NeteaseCloudMusicApi/master/static/docs.png)
 
@@ -389,6 +388,14 @@ banner({ type:0 }).then(res=>{
 250. 曲风-专辑
 251. 曲风-歌单
 252. 曲风-歌手
+253. 私信和通知接口
+254. 回忆坐标
+255. 播客搜索
+256. 播客声音上传
+257. 验证接口-二维码生成
+258. 验证接口-二维码检测
+259. 听歌识曲
+260. 根据nickname获取userid接口
 
 ## 更新日志
 

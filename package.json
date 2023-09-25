@@ -1,6 +1,6 @@
 {
   "name": "NeteaseCloudMusicApi",
-  "version": "4.8.10",
+  "version": "4.13.2",
   "description": "网易云音乐 NodeJS 版 API",
   "scripts": {
     "start": "node app.js",
@@ -68,10 +68,11 @@
     "express-fileupload": "^1.1.9",
     "md5": "^2.3.0",
     "music-metadata": "^7.5.3",
-    "pac-proxy-agent": "^5.0.0",
+    "pac-proxy-agent": "^7.0.0",
     "qrcode": "^1.4.4",
     "safe-decode-uri-component": "^1.2.1",
     "tunnel": "^0.0.6",
+    "xml2js": "^0.6.2",
     "yargs": "^17.1.1"
   },
   "devDependencies": {

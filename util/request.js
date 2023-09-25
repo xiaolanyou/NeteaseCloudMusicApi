@@ -1,12 +1,18 @@
 const encrypt = require('./crypto')
 const crypto = require('crypto')
 const { default: axios } = require('axios')
-const PacProxyAgent = require('pac-proxy-agent')
+const { PacProxyAgent } = require('pac-proxy-agent')
 const http = require('http')
 const https = require('https')
 const tunnel = require('tunnel')
+const fs = require('fs')
+const path = require('path')
+const tmpPath = require('os').tmpdir()
+const anonymous_token = fs.readFileSync(
+  path.resolve(tmpPath, './anonymous_token'),
+  'utf-8',
+)
 const { URLSearchParams, URL } = require('url')
-const config = require('../util/config.json')
 // request.debug = true // 开启可看到更详细信息
 
 const chooseUserAgent = (ua = false) => {
@@ -46,6 +52,11 @@ const chooseUserAgent = (ua = false) => {
 const createRequest = (method, url, data = {}, options) => {
   return new Promise((resolve, reject) => {
     let headers = { 'User-Agent': chooseUserAgent(options.ua) }
+    options.headers = options.headers || {}
+    headers = {
+      ...headers,
+      ...options.headers,
+    }
     if (method.toUpperCase() === 'POST')
       headers['Content-Type'] = 'application/x-www-form-urlencoded'
     if (url.includes('music.163.com'))
@@ -62,13 +73,16 @@ const createRequest = (method, url, data = {}, options) => {
       options.cookie = {
         ...options.cookie,
         __remember_me: true,
-        NMTID: crypto.randomBytes(16).toString('hex'),
+        // NMTID: crypto.randomBytes(16).toString('hex'),
         _ntes_nuid: crypto.randomBytes(16).toString('hex'),
+      }
+      if (url.indexOf('login') === -1) {
+        options.cookie['NMTID'] = crypto.randomBytes(16).toString('hex')
       }
       if (!options.cookie.MUSIC_U) {
         // 游客
         if (!options.cookie.MUSIC_A) {
-          options.cookie.MUSIC_A = config.anonymous_token
+          options.cookie.MUSIC_A = anonymous_token
         }
       }
       headers['Cookie'] = Object.keys(options.cookie)
@@ -86,6 +100,8 @@ const createRequest = (method, url, data = {}, options) => {
     }
     // console.log(options.cookie, headers['Cookie'])
     if (options.crypto === 'weapi') {
+      headers['User-Agent'] =
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.69'
       let csrfToken = (headers['Cookie'] || '').match(/_csrf=([^(;|$)]+)/)
       data.csrf_token = csrfToken ? csrfToken[1] : ''
       data = encrypt.weapi(data)
@@ -105,7 +121,7 @@ const createRequest = (method, url, data = {}, options) => {
       const header = {
         osver: cookie.osver, //系统版本
         deviceId: cookie.deviceId, //encrypt.base64.encode(imei + '\t02:00:00:00:00:00\t5106025eb79a5247\t70ffbaac7')
-        appver: cookie.appver || '8.7.01', // app版本
+        appver: cookie.appver || '8.9.70', // app版本
         versioncode: cookie.versioncode || '140', //版本号
         mobilename: cookie.mobilename, //设备model
         buildver: cookie.buildver || Date.now().toString().substr(0, 10),
@@ -148,10 +164,16 @@ const createRequest = (method, url, data = {}, options) => {
       } else {
         const purl = new URL(options.proxy)
         if (purl.hostname) {
-          const agent = tunnel.httpsOverHttp({
+          const agent = tunnel[
+            purl.protocol === 'https' ? 'httpsOverHttp' : 'httpOverHttp'
+          ]({
             proxy: {
               host: purl.hostname,
               port: purl.port || 80,
+              proxyAuth:
+                purl.username && purl.password
+                  ? purl.username + ':' + purl.password
+                  : '',
             },
           })
           settings.httpsAgent = agent
@@ -182,8 +204,11 @@ const createRequest = (method, url, data = {}, options) => {
           } else {
             answer.body = body
           }
+          if (answer.body.code) {
+            answer.body.code = Number(answer.body.code)
+          }
 
-          answer.status = answer.body.code || res.status
+          answer.status = Number(answer.body.code || res.status)
           if (
             [201, 302, 400, 502, 800, 801, 802, 803].indexOf(answer.body.code) >
             -1
